@@ -1,15 +1,24 @@
-const express = require('express');
-const codRoutes = require('./routes/codRoutes');
-const errorHandler = require('./middleware/errorHandler');
-require('dotenv').config();
+import express from 'express'
+import cors from 'cors'
+import cookieParser from 'cookie-parser';
+import healthcheckRouter from './routes/healthcheck.routes.js';
+import errorHandler from './middleware/error.middlewares.js';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+app.use(express.json({limit: "16kb"}))
+app.use(express.urlencoded({ extended:true , limit: "16kb"}))
+app.use(express.static("public"))
+app.use(cookieParser())
+app.use(
+    cors({
+        origin: process.env.CORS_ORIGIN,
+        credentials: true
+    })
+)
 
-app.use(express.json());
-app.use('/api/cod', codRoutes);
-app.use(errorHandler);
+app.use("/api/v1/healthcheck", healthcheckRouter);
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+
+app.use(errorHandler)
+
+export default app;

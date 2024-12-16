@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { generateProof } = require('../zk/proofs');
+const { generateProof } = require('../../zk/proofs');
 const ethers = require('ethers');
 
 const COD_API_KEY = process.env.COD_API_KEY;
