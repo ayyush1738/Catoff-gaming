@@ -1,5 +1,5 @@
-require('dotenv').config();
-import connectDB from './db/index.js';  
+import 'dotenv/config';
+import connectDB from './src/db/index.js';  
 import app from './app.js';
 
 
@@ -12,5 +12,5 @@ connectDB()
     });
   })
   .catch((err) => {
-    console.log("Error connecting to the database", err);
+    console.log("Ersror connecting to the database", err);
   });
