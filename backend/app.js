@@ -7,6 +7,8 @@ import errorHandler from './src/middleware/error.middleware.js';
 import passport from 'passport';
 import 'dotenv/config';
 import './src/config/passportSetup.js';
+import helmet from 'helmet';
+
 
 import router from "./src/routes/user.routes.js";
 
@@ -35,6 +37,22 @@ app.use(
         keys: [process.env.SESSION_SECRET], // Pass SESSION_SECRET as an array
     })
 );
+
+
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+                connectSrc: ["'self'", "http://localhost:5723"], // Allow backend connections
+                imgSrc: ["'self'", "data:", "https://*"],
+                styleSrc: ["'self'", "'unsafe-inline'"],
+            },
+        },
+    })
+);
+
 
 app.use(passport.initialize());
 app.use(passport.session());
