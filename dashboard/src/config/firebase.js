@@ -20,5 +20,4 @@ const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const provider = new TwitterAuthProvider();
 
-// Export the modules
-export { auth, provider, signInWithPopup };
+export { auth, provider, signInWithPopup, TwitterAuthProvider };

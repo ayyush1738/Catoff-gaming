@@ -1,5 +1,5 @@
 import React from "react";
-import { auth, provider, signInWithPopup, TwitterAuthProvider } from "../../config/firebase.js";
+import { auth, provider, signInWithPopup, TwitterAuthProvider } from "../config/firebase.js";
 
 const LoginPage = () => {
     const handleLogin = async () => {
