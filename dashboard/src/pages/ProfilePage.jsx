@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import Navbar from "../components/Navbar.jsx"
 
 const ProfilePage = () => {
     const query = new URLSearchParams(useLocation().search);
@@ -8,8 +9,9 @@ const ProfilePage = () => {
 
     return (
         <div className="container">
+            <Navbar />
             <h1>Welcome, {username}</h1>
-            <img src={photo} alt="Profile" />
+            {/* <img className="w-40 h-40 rounded-full" src={photo} alt="Profile" /> */}
         </div>
     );
 };
