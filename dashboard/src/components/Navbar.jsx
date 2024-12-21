@@ -9,7 +9,8 @@ const Navbar = () => {
                 <h2>Logo.</h2>
             </div>
             <div className="w-1/2">
-                <div className="float-right">
+                <div className="float-right flex space-x-4">
+                    <AddButton />
                     <AddButton />
                 </div>
             </div>
