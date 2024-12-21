@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     headers: {
-        'Content-Security-Policy': "script-src 'self' 'unsafe-inline' 'unsafe-eval' chrome-extension://*;",
+      'Content-Security-Policy': "script-src 'self' 'unsafe-inline' https://apis.google.com https://www.gstatic.com https://www.googletagmanager.com;",    
     },
 },
 })
