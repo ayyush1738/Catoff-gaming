@@ -6,6 +6,7 @@ import { ethers } from "ethers";
 const ProfilePage = () => {
     const query = new URLSearchParams(useLocation().search);
     const username = query.get("username") || "Guest";
+    const photo = query.get("photo")
 
     const [data, setData] = useState({
         address: "",
@@ -72,20 +73,30 @@ const ProfilePage = () => {
     };
 
     return (
-        <div className="relative w-full h-screen">
+        <div className="relative w-full">
             <Navbar />
-            <div className="relative z-10 flex flex-col items-center justify-center text-center">
-                <h1 className="text-4xl font-bold">
-                    {username.substr(0, 5)}
-                </h1>
-                <section>Address: {data.address || "No address connected"}</section>
-                <section>Balance: {data.Balance}</section>
-                <button
-                    onClick={btnHandler}
-                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-                >
-                    Connect Wallet
-                </button>
+            <div className="absolute h-screen w-full bg-cover z-0 ">
+                <img src="../../public/BlackOps3.jpg" className="z-0" alt="" />
+            </div>
+            <div className="h-96 w-3/4 mt-20 z-10 flex mx-auto font-medium text-sm py-2 px-4 text-white bg-gradient-to-t from-green-600 to-green-400 shadow-lg shadow-green-500/60 rounded-md hover:shadow-green-500/40 active:shadow-green-500/20">
+                <div className="relative z-10 flex flex-col items-center justify-center text-center">
+                    <h1 className="text-4xl font-bold">
+                        {username.substr(0, 5)}
+                    </h1>
+                    <img
+                    className="w-10 h-10 rounded-full"
+                    src={photo || "https://via.placeholder.com/150"}
+                    alt="Profile"
+                />
+                    <section>Address: {data.address || "No address connected"}</section>
+                    <section>Balance: {data.Balance}</section>
+                    <button
+                        onClick={btnHandler}
+                        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+                    >
+                        Connect Wallet
+                    </button>
+                </div>
             </div>
         </div>
     );

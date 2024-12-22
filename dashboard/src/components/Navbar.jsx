@@ -4,7 +4,7 @@ import AddButton from "./AddButton.jsx";
 
 const Navbar = () => {
     return(
-        <div className="w-screen p-4 flex ">
+        <div className="w-full p-4 flex ">
             <div className="w-1/2">
                 <h2>Logo.</h2>
             </div>
