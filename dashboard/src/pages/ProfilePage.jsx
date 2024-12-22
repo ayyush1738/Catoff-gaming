@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import { ethers } from "ethers";
@@ -9,48 +9,66 @@ const ProfilePage = () => {
 
     const [data, setData] = useState({
         address: "",
-        Balance: null,
+        Balance: "Fetching balance...", // Default value
     });
 
     const btnHandler = () => {
-        // Asking if metamask is already present or not
         if (window.ethereum) {
-            // res[0] for fetching a first wallet
             window.ethereum
                 .request({ method: "eth_requestAccounts" })
-                .then((res) =>
-                    accountChangeHandler(res[0])
-                );
+                .then((res) => accountChangeHandler(res[0]))
+                .catch((error) => {
+                    console.error("Error connecting wallet:", error);
+                    alert("Failed to connect wallet. Please try again.");
+                });
         } else {
-            alert("install metamask extension!!");
+            alert("Please install MetaMask extension!");
         }
     };
-    
-    // getbalance function for getting a balance in
-    // a right format with help of ethers
+
     const getbalance = (address) => {
-        // Requesting balance method
         window.ethereum
             .request({
                 method: "eth_getBalance",
                 params: [address, "latest"],
             })
             .then((balance) => {
-                // Setting balance
-                setData({
-                    Balance:
-                        ethers.utils.formatEther(balance),
-                });
+                console.log("Balance in Wei:", balance); // Debugging
+                if (balance) {
+                    try {
+                        setData((prevData) => ({
+                            ...prevData,
+                            Balance: ethers.utils.formatEther(balance),
+                        }));
+                    } catch (error) {
+                        console.error("Error formatting balance:", error);
+                        setData((prevData) => ({
+                            ...prevData,
+                            Balance: "Error formatting balance",
+                        }));
+                    }
+                } else {
+                    console.error("Balance is undefined or null.");
+                    setData((prevData) => ({
+                        ...prevData,
+                        Balance: "Unavailable",
+                    }));
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching balance:", error);
+                setData((prevData) => ({
+                    ...prevData,
+                    Balance: "Error fetching balance",
+                }));
             });
     };
 
     const accountChangeHandler = (account) => {
-        // Setting an address data
-        setData({
+        setData((prevData) => ({
+            ...prevData,
             address: account,
-        });
-    
-        // Setting a balance
+        }));
         getbalance(account);
     };
 
@@ -62,7 +80,7 @@ const ProfilePage = () => {
                     {username.substr(0, 5)}
                 </h1>
                 <section>Address: {data.address || "No address connected"}</section>
-                <section>Balance: {data.Balance || "Fetching balance..."}</section>
+                <section>Balance: {data.Balance}</section>
                 <button
                     onClick={btnHandler}
                     className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
