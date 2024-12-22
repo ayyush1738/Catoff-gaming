@@ -9,11 +9,11 @@ const ProfilePage = () => {
 
     const [data, setData] = useState({
         address: "",
-        Balance: "Fetching balance...", // Default value
+        Balance: "Fetching balance...",
     });
 
     const btnHandler = () => {
-        if (window.ethereum) {
+        if (window.ethereum && typeof window.ethereum.request === "function") {
             window.ethereum
                 .request({ method: "eth_requestAccounts" })
                 .then((res) => accountChangeHandler(res[0]))
@@ -27,41 +27,40 @@ const ProfilePage = () => {
     };
 
     const getbalance = (address) => {
-        window.ethereum
-            .request({
-                method: "eth_getBalance",
-                params: [address, "latest"],
-            })
-            .then((balance) => {
-                console.log("Balance in Wei:", balance); // Debugging
-                if (balance) {
-                    try {
+        if (window.ethereum && typeof window.ethereum.request === "function") {
+            window.ethereum
+                .request({
+                    method: "eth_getBalance",
+                    params: [address, "latest"],
+                })
+                .then((balance) => {
+                    if (ethers && ethers.utils && ethers.utils.formatEther) {
                         setData((prevData) => ({
                             ...prevData,
                             Balance: ethers.utils.formatEther(balance),
                         }));
-                    } catch (error) {
-                        console.error("Error formatting balance:", error);
+                    } else {
+                        console.error("ethers.utils.formatEther is not available");
                         setData((prevData) => ({
                             ...prevData,
-                            Balance: "Error formatting balance",
+                            Balance: "Formatting utility unavailable",
                         }));
                     }
-                } else {
-                    console.error("Balance is undefined or null.");
+                })
+                .catch((error) => {
+                    console.error("Error fetching balance:", error);
                     setData((prevData) => ({
                         ...prevData,
-                        Balance: "Unavailable",
+                        Balance: "Error fetching balance",
                     }));
-                }
-            })
-            .catch((error) => {
-                console.error("Error fetching balance:", error);
-                setData((prevData) => ({
-                    ...prevData,
-                    Balance: "Error fetching balance",
-                }));
-            });
+                });
+        } else {
+            console.error("Ethereum provider is not available.");
+            setData((prevData) => ({
+                ...prevData,
+                Balance: "Ethereum provider unavailable",
+            }));
+        }
     };
 
     const accountChangeHandler = (account) => {
