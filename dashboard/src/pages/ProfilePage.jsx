@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import { ethers } from "ethers";
+import bops from "../../public/BlackOps3.jpg";
 
 const ProfilePage = () => {
     const query = new URLSearchParams(useLocation().search);
     const username = query.get("username") || "Guest";
-    const photo = query.get("photo")
+    const photo = query.get("photo");
 
     const [data, setData] = useState({
         address: "",
@@ -73,26 +74,31 @@ const ProfilePage = () => {
     };
 
     return (
-        <div className="relative w-full">
-            <Navbar />
-            <div className="absolute h-screen w-full bg-cover z-0 ">
-                <img src="../../public/BlackOps3.jpg" className="z-0" alt="" />
+        <div
+            className="relative min-h-screen bg-cover bg-center"
+            style={{ backgroundImage: `url(${bops})` }}
+        >
+            {/* Navbar above the background */}
+            <div className="relative z-20">
+                <Navbar />
             </div>
-            <div className="h-96 w-3/4 mt-20 z-10 flex mx-auto font-medium text-sm py-2 px-4 text-white bg-gradient-to-t from-green-600 to-green-400 shadow-lg shadow-green-500/60 rounded-md hover:shadow-green-500/40 active:shadow-green-500/20">
-                <div className="relative z-10 flex flex-col items-center justify-center text-center">
-                    <h1 className="text-4xl font-bold">
-                        {username.substr(0, 5)}
-                    </h1>
-                    <img
-                    className="w-10 h-10 rounded-full"
-                    src={photo || "https://via.placeholder.com/150"}
-                    alt="Profile"
-                />
+
+            {/* Content centered above the background */}
+            <div className="absolute inset-0 flex items-center justify-center">
+                <div className="relative z-30 p-8 bg-gradient-to-t from-orange-300 to-orange-600 shadow-lg rounded-lg text-white max-w-lg text-center">
+                    <div className="flex justify-between">
+                        <img
+                            className="w-20 h-20 rounded-full mb-4"
+                            src={photo || "https://via.placeholder.com/150"}
+                            alt="Profile"
+                        />
+                        <h1 className="text-4xl font-bold mx-1 mt-4 mb-4">{username}</h1>
+                    </div>
                     <section>Address: {data.address || "No address connected"}</section>
                     <section>Balance: {data.Balance}</section>
                     <button
                         onClick={btnHandler}
-                        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+                        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                     >
                         Connect Wallet
                     </button>

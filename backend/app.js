@@ -25,7 +25,6 @@ app.use(
     })
 );
 
-// Session middleware
 if (!process.env.SESSION_SECRET) {
     throw new Error("SESSION_SECRET is not defined in the environment variables.");
 }
@@ -34,7 +33,7 @@ app.use(
     session({
         name: "session",
         maxAge: 24 * 60 * 60 * 1000, // 1 day
-        keys: [process.env.SESSION_SECRET], // Pass SESSION_SECRET as an array
+        keys: [process.env.SESSION_SECRET], 
     })
 );
 
