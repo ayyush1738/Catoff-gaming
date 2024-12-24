@@ -78,12 +78,10 @@ const ProfilePage = () => {
             className="relative min-h-screen bg-cover bg-center"
             style={{ backgroundImage: `url(${bops})` }}
         >
-            {/* Navbar above the background */}
             <div className="relative z-20">
                 <Navbar />
             </div>
 
-            {/* Content centered above the background */}
             <div className="absolute inset-0 flex items-center justify-center">
                 <div className="relative z-30 p-8 bg-gradient-to-t from-orange-300 to-orange-600 shadow-lg rounded-lg text-white max-w-lg text-center">
                     <div className="flex justify-between">
