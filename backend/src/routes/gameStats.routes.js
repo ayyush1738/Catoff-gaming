@@ -1,10 +1,9 @@
-const express = require('express');
-const { getPlayerStats, placeBet, validateStats } = require('../controllers/codController');
+import express from "express";
+import { getPlayerStats } from "../controllers/gameStats.controllers.js";
 
 const router = express.Router();
 
-router.get('/player/:platform/:username', getPlayerStats);
-router.post('/bet', placeBet);
-router.post('/validate', validateStats);
+// Define route for fetching player stats
+router.get("/player/:platform/:username", getPlayerStats);
 
-module.exports = router;
+export default router;

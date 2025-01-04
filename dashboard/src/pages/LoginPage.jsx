@@ -1,12 +1,14 @@
 import React from "react";
 import { auth, provider, signInWithPopup, TwitterAuthProvider } from "../config/firebase.js";
+import { useNavigate } from "react-router-dom";
+import ProfilePage from './ProfilePage.jsx';
 
 const LoginPage = () => {
+    const navigate = useNavigate();
     const handleLogin = async () => {
         try {
             const result = await signInWithPopup(auth, provider);
 
-            // Get the credential
             const credential = TwitterAuthProvider.credentialFromResult(result);
             const token = credential.accessToken;
             const secret = credential.secret;
@@ -16,8 +18,8 @@ const LoginPage = () => {
             console.log("Access Token:", token);
             console.log("Token Secret:", secret);
 
-            // Navigate to the profile page
             window.location.href = `/profile?username=${user.displayName}&photo=${user.photoURL}`;
+            navigate(route)
         } catch (error) {
             console.error("Error during sign-in:", error);
         }
@@ -26,7 +28,7 @@ const LoginPage = () => {
     return (
         <div className="container">
             <h1>Login with Twitter</h1>
-            <button onClick={handleLogin}>Login with Twitter</button>
+            <button onClick={handleLogin} route="/profile">Login with Twitter</button>
         </div>
     );
 };

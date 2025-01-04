@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import WagerLink from "./WagerLink";
+import bops from "../../public/BlackOps3.jpg";
+
 
 const Wager = () => {
     const [challenge, setChallenge] = useState("");
@@ -27,7 +29,9 @@ const Wager = () => {
     };
 
     return (
-        <div className="wager-form">
+        <div className="wager-form min-h-screen bg-center bg-cover"
+            style={{ backgroundImage: `url(${bops})` }}
+        >
             <h2>Create a New Wager</h2>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
