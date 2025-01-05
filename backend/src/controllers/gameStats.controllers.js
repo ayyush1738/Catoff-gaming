@@ -1,8 +1,8 @@
-import axios from "axios";
+import axios from 'axios';
 import 'dotenv/config';
 
+const COD_API_KEY = process.env.COD_API_KEY; // Ensure this is set in your `.env` file
 
-// Controller to fetch COD player stats
 export const getPlayerStats = async (req, res) => {
     try {
         const { platform, username } = req.params;
@@ -11,13 +11,13 @@ export const getPlayerStats = async (req, res) => {
             `https://api.tracker.gg/api/v2/warzone/standard/profile/${platform}/${username}`,
             {
                 headers: {
-                    "TRN-Api-Key": COD_API_KEY,
+                    'TRN-Api-Key': COD_API_KEY,
                 },
             }
         );
 
         res.json(response.data.data);
     } catch (err) {
-        res.status(500).json({ error: "Error fetching player data" });
+        res.status(500).json({ error: 'Error fetching player data' });
     }
 };

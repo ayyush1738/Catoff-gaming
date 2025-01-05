@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import WagerLink from "./WagerLink";
 import bops from "../../public/BlackOps3.jpg";
+import AddButton from "./AddButton.jsx";
 
 
 const Wager = () => {
@@ -27,6 +28,27 @@ const Wager = () => {
             alert("Failed to create wager");
         }
     };
+
+    const handleClick = async () => {
+        try {
+            const result = await signInWithPopup(auth, provider);
+
+            const credential = TwitterAuthProvider.credentialFromResult(result);
+            const token = credential.accessToken;
+            const secret = credential.secret;
+            const user = result.user;
+
+            console.log("User Info:", user);
+            console.log("Access Token:", token);
+            console.log("Token Secret:", secret);
+
+            window.location.href = `/profile?username=${user.displayName}&photo=${user.photoURL}`;
+            navigate(route);
+        } catch (error) {
+            console.error("Error during sign-in:", error);
+        }
+    };
+
 
     return (
         <div className="wager-form min-h-screen bg-center bg-cover"
@@ -57,6 +79,7 @@ const Wager = () => {
                 <button type="submit">Create Wager</button>
             </form>
             {wagerLink && <WagerLink link={wagerLink} />}
+            <AddButton btnVal="Connect" onClick={handleClick}/>
         </div>
     );
 };
