@@ -60,7 +60,7 @@ const Wager = () => {
             <div className="z-30 p-8 bg-gradient-to-t from-orange-300 to-orange-600 shadow-lg rounded-lg text-white max-w-lg text-center">
             <div>
                 <h1>Connect Your Call of Duty Account</h1>
-                <AddButton btnVal="Connect" onClick={handleClick}/>
+                <AddButton btnVal="Connect" onClick={connectCodHandler}/>
                 {codAccount && (
                     <div>
                         <h2>Connected Account:</h2>
