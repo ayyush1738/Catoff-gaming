@@ -9,6 +9,23 @@ const Wager = () => {
     const [challenge, setChallenge] = useState("");
     const [amount, setAmount] = useState("");
     const [wagerLink, setWagerLink] = useState("");
+    const [codAccount, setCodAccount] = useState(null);
+
+    const connectCodHandler = async () => {
+        try {
+            const response = await fetch("http://localhost:8000/connect-cod", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            const data = await response.json();
+            setCodAccount(data);
+        } catch (error) {
+            console.error("Error connecting to COD account:", error);
+            alert("Failed to connect to COD account. Please try again.");
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -31,19 +48,7 @@ const Wager = () => {
 
     const handleClick = async () => {
         try {
-            const result = await signInWithPopup(auth, provider);
-
-            const credential = TwitterAuthProvider.credentialFromResult(result);
-            const token = credential.accessToken;
-            const secret = credential.secret;
-            const user = result.user;
-
-            console.log("User Info:", user);
-            console.log("Access Token:", token);
-            console.log("Token Secret:", secret);
-
-            window.location.href = `/profile?username=${user.displayName}&photo=${user.photoURL}`;
-            navigate(route);
+            
         } catch (error) {
             console.error("Error during sign-in:", error);
         }
@@ -51,35 +56,20 @@ const Wager = () => {
 
 
     return (
-        <div className="wager-form min-h-screen bg-center bg-cover"
-            style={{ backgroundImage: `url(${bops})` }}
-        >
-            <h2>Create a New Wager</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label>Challenge</label>
-                    <input
-                        type="text"
-                        placeholder="e.g., First to 10 kills"
-                        value={challenge}
-                        onChange={(e) => setChallenge(e.target.value)}
-                        required
-                    />
+        <div className="absolute inset-0 flex items-center justify-center">
+            <div className="z-30 p-8 bg-gradient-to-t from-orange-300 to-orange-600 shadow-lg rounded-lg text-white max-w-lg text-center">
+            <div>
+                <h1>Connect Your Call of Duty Account</h1>
+                <AddButton btnVal="Connect" onClick={handleClick}/>
+                {codAccount && (
+                    <div>
+                        <h2>Connected Account:</h2>
+                        <p>Username: {codAccount.username}</p>
+                        <p>Platform: {codAccount.platform}</p>
+                    </div>
+                )}
                 </div>
-                <div className="form-group">
-                    <label>Wager Amount (ETH)</label>
-                    <input
-                        type="number"
-                        placeholder="e.g., 0.01"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                        required
-                    />
-                </div>
-                <button type="submit">Create Wager</button>
-            </form>
-            {wagerLink && <WagerLink link={wagerLink} />}
-            <AddButton btnVal="Connect" onClick={handleClick}/>
+            </div>
         </div>
     );
 };

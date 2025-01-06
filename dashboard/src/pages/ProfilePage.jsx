@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import { ethers } from "ethers";
 import bops from "../../public/BlackOps3.jpg";
+import Wager from "../components/Wager.jsx"
 
 const ProfilePage = () => {
     const query = new URLSearchParams(useLocation().search);
@@ -13,6 +14,9 @@ const ProfilePage = () => {
         address: "",
         Balance: "Fetching balance...",
     });
+
+    const [showFirstBox, setShowFirstBox] = useState(true);
+    const [showSecondBox, setShowSecondBox] = useState(false);
 
     const btnHandler = () => {
         if (window.ethereum && typeof window.ethereum.request === "function") {
@@ -73,16 +77,22 @@ const ProfilePage = () => {
         getbalance(account);
     };
 
+    const handleShowSecondBox = () => {
+        setShowSecondBox(true);
+        setShowFirstBox(false);
+    }
+
     return (
         <div
             className="relative min-h-screen bg-cover bg-center"
             style={{ backgroundImage: `url(${bops})` }}
         >
             <div className="relative z-20">
-                <Navbar />
+                <Navbar onAddWagerClick={handleShowSecondBox} />
             </div>
 
-            <div className="absolute inset-0 flex items-center justify-center">
+            {showFirstBox && (
+                <div className="absolute inset-0 flex items-center justify-center">
                 <div className="relative z-30 p-8 bg-gradient-to-t from-orange-300 to-orange-600 shadow-lg rounded-lg text-white max-w-lg text-center">
                     <div className="flex justify-between">
                         <img
@@ -102,6 +112,11 @@ const ProfilePage = () => {
                     </button>
                 </div>
             </div>
+            )}
+            
+            {showSecondBox && (
+                <Wager />
+            )}
         </div>
     );
 };

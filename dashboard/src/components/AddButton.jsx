@@ -1,16 +1,10 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 
-const AddButton = ({ btnVal, route }) => {
-    const navigate = useNavigate();
-
-    const handleClick = () => {
-        navigate(route);
-    };
+const AddButton = ({btnVal, onClick}) => {
 
     return (
         <button
-            onClick={handleClick}
+            onClick={onClick}
             className="flex items-center font-medium text-sm py-2 px-4 text-white bg-gradient-to-t from-gray-600 to-gray-400 shadow-lg shadow-white-500/60 rounded-full hover:shadow-gray-500/40 active:shadow-gray-500/20"
         >
             <svg

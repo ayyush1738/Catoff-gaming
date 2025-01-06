@@ -1,7 +1,7 @@
 import React from "react";
 import AddButton from "./AddButton";
 
-const Navbar = () => {
+const Navbar = ({onAddWagerClick}) => {
     return (
         <div className="w-full p-4 flex ">
             <div className="w-1/2">
@@ -9,7 +9,7 @@ const Navbar = () => {
             </div>
             <div className="w-1/2">
                 <div className="flex space-x-4 float-right">
-                    <AddButton btnVal="Add Wager" route="/addWager" />
+                    <AddButton btnVal="Add Wager" onClick={onAddWagerClick} />
                 </div>
             </div>
         </div>

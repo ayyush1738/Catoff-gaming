@@ -1,7 +1,6 @@
 import React from "react";
 import { auth, provider, signInWithPopup, TwitterAuthProvider } from "../config/firebase.js";
 import { useNavigate } from "react-router-dom";
-import ProfilePage from './ProfilePage.jsx';
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -19,7 +18,7 @@ const LoginPage = () => {
             console.log("Token Secret:", secret);
 
             window.location.href = `/profile?username=${user.displayName}&photo=${user.photoURL}`;
-            navigate(route)
+            navigate(route);
         } catch (error) {
             console.error("Error during sign-in:", error);
         }
