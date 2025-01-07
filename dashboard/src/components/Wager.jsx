@@ -13,7 +13,7 @@ const Wager = () => {
 
     const connectCodHandler = async () => {
         try {
-            const response = await fetch("http://localhost:8000/connect-cod", {
+            const response = await fetch("http://localhost:8000/api/cod/player/${platform}/${username}", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
