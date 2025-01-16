@@ -4,6 +4,6 @@ import { getFortniteStats } from "../controllers/gameStats.controllers.js";
 const router = express.Router();
 
 // Route for fetching player stats
-router.get("/player/:platform/:username", getFortniteStats);
+router.get("/fortnite/:platform/:username", getFortniteStats);
 
 export default router;
