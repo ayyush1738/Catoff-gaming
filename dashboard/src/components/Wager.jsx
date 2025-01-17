@@ -1,118 +1,103 @@
-import React, { useState } from "react";
-import axios from "axios";
-import bops from "../../public/BlackOps3.jpg";
+// Import necessary libraries
+import React, { useState } from 'react';
+import axios from 'axios';
 
-const Wager = () => {
-  const [username, setUsername] = useState("");
-  const [platform, setPlatform] = useState("epic"); // Default to "epic"
-  const [stats, setStats] = useState(null);
-  const [error, setError] = useState("");
-  const [showNextPart, setShowNextPart] = useState(false); // State to manage slider visibility
+const CreateWager = () => {
+  // State variables for form inputs and generated wager link
+  const [betAmount, setBetAmount] = useState('');
+  const [chain, setChain] = useState('USD');
+  const [wagerType, setWagerType] = useState('First to kill 6 people');
+  const [wagerLink, setWagerLink] = useState('');
 
-  const fetchStats = async () => {
-    if (!username) {
-      setError("Please enter a username.");
-      return;
-    }
-    
+  // Form submission handler
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     try {
-      const encodedUsername = encodeURIComponent(username);
-      const response = await axios.get(
-        `http://localhost:8000/api/cod/fortnite/${platform}/${encodedUsername}`
-      );
-      setStats(response.data);
-      setError("");
-      setShowNextPart(true); // Show the next part after fetching stats successfully
-    } catch (err) {
-      setError("Failed to fetch stats. Please check the username or platform.");
-      console.error(err);
-      setShowNextPart(true);
+      // Send wager data to the backend
+      const response = await axios.post('http://localhost:8000/api/setWager/create', {
+        betAmount,
+        chain,
+        wagerType,
+      });
+
+      // Update wager link state with the response from backend
+      setWagerLink(response.data.wagerLink);
+    } catch (error) {
+      console.error('Error creating wager:', error);
+      alert('Failed to create wager. Please try again.');
     }
   };
 
   return (
-    <div className="absolute inset-0 flex items-center justify-center">
-      <div className="z-30 p-8 bg-gradient-to-t from-orange-300 to-orange-600 shadow-lg rounded-lg max-w-lg text-center">
-        {/* Slider Part 1 */}
-        {!showNextPart && (
-          <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-            <h1>Fortnite Player Stats</h1>
-            <div style={{ marginBottom: "20px" }}>
-              <label>
-                <strong>Platform:</strong>
-                <select
-                  value={platform}
-                  onChange={(e) => setPlatform(e.target.value)}
-                  style={{ marginLeft: "10px", padding: "5px" }}
-                >
-                  <option value="epic">Epic</option>
-                  <option value="psn">PlayStation</option>
-                  <option value="xbl">Xbox</option>
-                </select>
-              </label>
-            </div>
-            <div style={{ marginBottom: "20px" }}>
-              <input
-                type="text"
-                placeholder="Enter Epic Games Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                style={{ padding: "10px", width: "300px" }}
-              />
-            </div>
-            <button
-              onClick={fetchStats}
-              style={{
-                padding: "10px 20px",
-                backgroundColor: "#007bff",
-                color: "white",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              Connect
-            </button>
-            {error && <p style={{ color: "red" }}>{error}</p>}
-            {stats && (
-              <div style={{ marginTop: "20px" }}>
-                <h2>Player: {stats.platformInfo.platformUserHandle}</h2>
-                <p><strong>Wins:</strong> {stats.stats.all.overall.wins}</p>
-                <p><strong>Kills:</strong> {stats.stats.all.overall.kills}</p>
-                <p><strong>K/D Ratio:</strong> {stats.stats.all.overall.kd}</p>
-              </div>
-            )}
-          </div>
-        )}
+    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md mt-10">
+      <h2 className="text-2xl font-bold mb-4">Create a Wager</h2>
 
-        {/* Slider Part 2 */}
-        {showNextPart && (
-          <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-            <h1>Set Your Wager</h1>
-            <p>Create a challenge and set a bet to compete!</p>
-            <div style={{ marginBottom: "20px" }}>
-              <input
-                type="number"
-                placeholder="Enter Bet Amount"
-                style={{ padding: "10px", width: "300px" }}
-              />
-            </div>
-            <button
-              onClick={() => alert("Wager Created!")}
-              style={{
-                padding: "10px 20px",
-                backgroundColor: "#28a745",
-                color: "white",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              Create Wager
-            </button>
-          </div>
-        )}
-      </div>
+      <form onSubmit={handleSubmit}>
+        {/* Bet Amount Input */}
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-2">Bet Amount</label>
+          <input
+            type="number"
+            className="w-full border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-200"
+            placeholder="Enter bet amount"
+            value={betAmount}
+            onChange={(e) => setBetAmount(e.target.value)}
+            required
+          />
+        </div>
+
+        {/* Chain Selector */}
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-2">Select Chain</label>
+          <select
+            className="w-full border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-200"
+            value={chain}
+            onChange={(e) => setChain(e.target.value)}
+          >
+            <option value="USD">USD</option>
+            <option value="ETH">ETH (Holesky)</option>
+          </select>
+        </div>
+
+        {/* Wager Type Selector */}
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-2">Wager Type</label>
+          <select
+            className="w-full border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-200"
+            value={wagerType}
+            onChange={(e) => setWagerType(e.target.value)}
+          >
+            <option value="First to kill 6 people">First to kill 6 people</option>
+            <option value="First to kill 10 people">First to kill 10 people</option>
+          </select>
+        </div>
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="w-full bg-blue-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-600"
+        >
+          Create Wager
+        </button>
+      </form>
+
+      {/* Display Generated Wager Link */}
+      {wagerLink && (
+        <div className="mt-6 bg-gray-100 p-4 rounded-lg">
+          <p className="text-gray-700 font-medium">Wager Link:</p>
+          <a
+            href={wagerLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:underline"
+          >
+            {wagerLink}
+          </a>
+        </div>
+      )}
     </div>
   );
 };
 
-export default Wager;
+export default CreateWager;

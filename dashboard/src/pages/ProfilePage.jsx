@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import { ethers } from "ethers";
 import bops from "../../public/BlackOps3.jpg";
-import Wager from "../components/Wager.jsx"
+import ConnectGame from "../components/ConnectGame.jsx"
 
 const ProfilePage = () => {
     const query = new URLSearchParams(useLocation().search);
@@ -115,7 +115,7 @@ const ProfilePage = () => {
             )}
             
             {showSecondBox && (
-                <Wager />
+                <ConnectGame />
             )}
         </div>
     );

@@ -18,7 +18,6 @@ export const getFortniteStats = async (req, res) => {
             },
         });
 
-        // Return the player's Fortnite stats
         res.status(200).json({message: "Successfully Connected", status: 200})
     } catch (err) {
         console.error('Error fetching Fortnite stats:', err.response?.data || err.message);

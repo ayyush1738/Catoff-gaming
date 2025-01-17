@@ -1,46 +1,55 @@
-const axios = require('axios');
-const { generateProof } = require('../../zk/proofs');
-const ethers = require('ethers');
+import axios from 'axios';
+import { ethers } from 'ethers';
 
-const COD_API_KEY = process.env.COD_API_KEY;
-
-// Fetch COD player stats
-const getPlayerStats = async (req, res, next) => {
-    try {
-        const { platform, username } = req.params;
-        const response = await axios.get(
-            `https://api.tracker.gg/api/v2/warzone/standard/profile/${platform}/${username}`,
-            { headers: { 'TRN-Api-Key': COD_API_KEY } }
-        );
-        res.json(response.data);
-    } catch (error) {
-        next(error);
-    }
+// Utility function to generate a unique wager ID
+const generateUniqueId = () => {
+    return Math.random().toString(36).substr(2, 9);
 };
+
+// In-memory storage for wagers (replace with a database for production)
+const wagers = {};
 
 // Place a bet
-const placeBet = async (req, res, next) => {
+export const createWager = async (req, res) => {
     try {
-        const { condition, amount } = req.body;
-        const tx = await contract.placeBet(condition, {
-            value: ethers.utils.parseEther(amount),
+        const { betAmount, chain, wagerType } = req.body;
+
+        // Validate input
+        if (!betAmount || typeof betAmount !== 'number' || betAmount <= 0) {
+            return res.status(400).json({ error: 'Invalid bet amount. Must be a positive number.' });
+        }
+
+        if (!chain || !['USD', 'ETH'].includes(chain)) {
+            return res.status(400).json({ error: 'Invalid chain. Must be "USD" or "ETH".' });
+        }
+
+        if (!wagerType || !['First to kill 6 people', 'First to kill 10 people'].includes(wagerType)) {
+            return res.status(400).json({ error: 'Invalid wager type. Must be a valid type.' });
+        }
+
+        const wagerId = generateUniqueId();
+        const wagerLink = `${req.protocol}://${req.get('host')}/wager/${wagerId}`;
+
+        // Save wager details (use a database or in-memory for simplicity)
+        wagers[wagerId] = { betAmount, chain, wagerType, createdAt: new Date().toISOString() };
+
+        res.status(201).json({ wagerLink, wagerId });
+    } catch (err) {
+        console.error('Error Creating The Wager:', err.response?.data || err.message);
+        res.status(err.response?.status || 500).json({
+            error: err.response?.data?.errors?.[0]?.message || 'An unexpected error occurred while creating the wager.',
         });
-        await tx.wait();
-        res.json({ success: true, txHash: tx.hash });
-    } catch (error) {
-        next(error);
     }
 };
 
-// Validate stats using zk-proof
-const validateStats = async (req, res, next) => {
-    try {
-        const { kills } = req.body;
-        const proof = await generateProof(kills);
-        res.json({ proof });
-    } catch (error) {
-        next(error);
-    }
-};
 
-module.exports = { getPlayerStats, placeBet, validateStats };
+// const validateStats = async (req, res, next) => {
+//     try {
+//         const { kills } = req.body;
+//         const proof = await generateProof(kills);
+//         res.json({ proof });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+
