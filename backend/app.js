@@ -12,10 +12,10 @@ import bodyParser from "body-parser";
 
 const app = express();
 const corsOptions = {
-    origin: "http://localhost:5173/", // Allow your frontend URL
+    origin: ["http://localhost:5173"], // Allow your frontend URL
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true, 
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "TRN-Api-Key"]
 };
   
 app.use(cors(corsOptions));

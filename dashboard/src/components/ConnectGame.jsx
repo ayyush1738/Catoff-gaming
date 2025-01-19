@@ -4,22 +4,29 @@ import bops from "../../public/BlackOps3.jpg";
 import CreateWager from "./Wager.jsx";
 
 const ConnectGame = () => {
-  const [username, setUsername] = useState("");
-  const [platform, setPlatform] = useState("epic"); // Default to "epic"
+  const [matchId, setMatchId] = useState("");
+  const [game, setPlatform] = useState("mw");
+  const [mode, setMode] =  useState("wz");
   const [stats, setStats] = useState(null);
   const [error, setError] = useState("");
   const [showNextPart, setShowNextPart] = useState(false); // State to manage slider visibility
 
   const fetchStats = async () => {
-    if (!username) {
+    if (!matchId) {
       setError("Please enter a username.");
       return;
     }
     
     try {
-      const encodedUsername = encodeURIComponent(username);
+      const encodedMatchId = encodeURIComponent(matchId);
       const response = await axios.get(
-        `http://localhost:8000/api/connect/fortnite/${platform}/${encodedUsername}`
+        `http://localhost:8000/api/connect/fortnite/${game}/${mode}/${encodedMatchId}`,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                // Add any additional headers if needed
+            }
+        }
       );
       setStats(response.data);
       setError("");
@@ -37,16 +44,26 @@ const ConnectGame = () => {
         {/* Slider Part 1 */}
         {!showNextPart && (
           <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-            <h1>Fortnite Player Stats</h1>
+            <h1>Call Of Duty Player Stats</h1>
             <div style={{ marginBottom: "20px" }}>
               <label>
-                <strong>Platform:</strong>
+                <strong>Game:</strong>
                 <select
-                  value={platform}
+                  value={game}
                   onChange={(e) => setPlatform(e.target.value)}
                   style={{ marginLeft: "10px", padding: "5px" }}
                 >
-                  <option value="epic">Epic</option>
+                  <option value="mw">Modern Warfare</option>
+                  <option value="psn">Black Ops</option>
+                  <option value="xbl">Ghosts</option>
+                </select>
+                <strong>Mode:</strong>
+                <select
+                  value={mode}
+                  onChange={(e) => setPlatform(e.target.value)}
+                  style={{ marginLeft: "10px", padding: "5px" }}
+                >
+                  <option value="wz">War Zone</option>
                   <option value="psn">PlayStation</option>
                   <option value="xbl">Xbox</option>
                 </select>
@@ -55,8 +72,8 @@ const ConnectGame = () => {
             <div style={{ marginBottom: "20px" }}>
               <input
                 type="text"
-                placeholder="Enter Epic Games Username"
-                value={username}
+                placeholder="Enter Match Id"
+                value={matchId}
                 onChange={(e) => setUsername(e.target.value)}
                 style={{ padding: "10px", width: "300px" }}
               />
