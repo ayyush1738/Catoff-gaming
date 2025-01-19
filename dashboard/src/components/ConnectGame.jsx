@@ -34,7 +34,6 @@ const ConnectGame = () => {
     } catch (err) {
       setError("Failed to fetch stats. Please check the username or platform.");
       console.error(err);
-      // setShowNextPart(true);
     }
   };
 
@@ -57,10 +56,11 @@ const ConnectGame = () => {
                   <option value="psn">Black Ops</option>
                   <option value="xbl">Ghosts</option>
                 </select>
+
                 <strong>Mode:</strong>
                 <select
                   value={mode}
-                  onChange={(e) => setPlatform(e.target.value)}
+                  onChange={(e) => setMode(e.target.value)}
                   style={{ marginLeft: "10px", padding: "5px" }}
                 >
                   <option value="wz">War Zone</option>
@@ -74,7 +74,7 @@ const ConnectGame = () => {
                 type="text"
                 placeholder="Enter Match Id"
                 value={matchId}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => setMatchId(e.target.value)}
                 style={{ padding: "10px", width: "300px" }}
               />
             </div>
